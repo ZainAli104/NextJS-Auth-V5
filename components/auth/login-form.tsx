@@ -1,6 +1,7 @@
 "use client";
 
 import {useState, useTransition} from "react";
+import {useSearchParams} from "next/navigation";
 import * as z from 'zod';
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -15,6 +16,11 @@ import {FormSuccess} from "@/components/form-success";
 import {login} from "@/actions/login";
 
 export const LoginForm = () => {
+    const searchParams = useSearchParams();
+    const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
+        ? "Email already in use with different provider!"
+        : "";
+
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
@@ -33,8 +39,9 @@ export const LoginForm = () => {
 
         startTransition(() => {
             login(values).then((data) => {
-                setError(data.error);
-                setSuccess(data.success);
+                setError(data?.error);
+                // TODO: Add when we add 2FA
+                // setSuccess(data?.success);
             })
         });
     };
@@ -52,7 +59,7 @@ export const LoginForm = () => {
                         <FormField
                             control={form.control}
                             name="email"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
@@ -63,14 +70,14 @@ export const LoginForm = () => {
                                             type="email"
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
                         <FormField
                             control={form.control}
                             name="password"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
@@ -81,13 +88,13 @@ export const LoginForm = () => {
                                             type="password"
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
                     </div>
-                    <FormError message={error} />
-                    <FormSuccess message={success} />
+                    <FormError message={error || urlError}/>
+                    <FormSuccess message={success}/>
                     <Button
                         disabled={isPending}
                         type="submit"
