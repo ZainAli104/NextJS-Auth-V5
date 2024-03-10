@@ -36,6 +36,8 @@ export const RegisterForm = () => {
             register(values).then((data) => {
                 setError(data.error);
                 setSuccess(data.success);
+            }).catch(() => {
+                setError("Something went wrong!");
             });
         });
     };
