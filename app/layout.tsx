@@ -1,5 +1,9 @@
+import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+
+import NextNProgressClient from "@/components/ui/next-progress";
+
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <NextNProgressClient />
+        {children}
+      </body>
     </html>
   );
 }

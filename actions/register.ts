@@ -3,7 +3,7 @@
 import * as z from 'zod';
 import bcrypt from "bcryptjs";
 
-import db from "@/lib/db";
+import prismadb from "@/lib/db";
 import {RegisterSchema} from "@/schemas";
 import {getUserByEmail} from "@/data/user";
 import {generateVerificationToken} from "@/lib/tokens";
@@ -24,7 +24,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
         return { error: "Email already in use!" };
     }
 
-    await db.user.create({
+    await prismadb.user.create({
         data: {
             name,
             email,
