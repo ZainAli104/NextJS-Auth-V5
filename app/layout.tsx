@@ -1,12 +1,13 @@
 import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import {SessionProvider} from "next-auth/react";
 
 import {auth} from "@/auth";
 import NextNProgressClient from "@/components/ui/next-progress";
+import {Toaster} from "@/components/ui/sonner";
 
 import "./globals.css";
-import {SessionProvider} from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default async function RootLayout({
         <html lang="en">
           <body className={inter.className}>
             <NextNProgressClient />
+            <Toaster />
             {children}
           </body>
         </html>
